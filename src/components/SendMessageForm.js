@@ -15,8 +15,9 @@ class SendMessageForm extends React.Component {
       text: e.target.value
     });
     if (this.props.onChange) {
-      this.props.handleFormChange()
+      this.props.onChange()
     }
+    this.props.onChange()
   }
 
   handleSubmit(e) {
