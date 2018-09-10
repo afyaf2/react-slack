@@ -1,16 +1,20 @@
  import React from 'react'
  import Chatkit from '@pusher/chatkit'
  import MessageList from './components/MessageList'
+ import SendMessageForm from './components/SendMessageForm'
 
  class ChatScreen extends React.Component {
   constructor(props){
     super(props)
     this.state = {
       messages: [],
+      currentRoom: {},
+      currentUser: {}
     }
+    this.sendMessage = this.sendMessage.bind(this)
   }
 
-  // connect componenet to chatkit API with npm
+  // connect componenet to chatkit API with npm on load
   componentDidMount() {
     const chatManager = new Chatkit.ChatManager({
       instanceLocator: 'v1:us1:1c13b3f2-e119-4f5b-87be-54c0dd3d6e74',
@@ -23,6 +27,7 @@
     chatManager
       .connect()
       .then(currentUser => {
+        this.setState({currentUser})
         return currentUser.subscribeToRoom({
           roomId: 15866294,
           messageLimit: 100,
@@ -34,14 +39,27 @@
             }
           }
         })
-      }).then(CurrentRoom => {})
+      }).then(currentRoom => {
+        this.setState({currentRoom})
+      })
       .catch(error => console.log('error', error))
   }
 
+  // send message to chatkitAPI on form submission
+
+  sendMessage(text) {
+    this.state.currentUser.sendMessage({
+      text,
+      roomId: this.state.currentRoom.id,
+    })
+  }
 
   render() {
     return (
+      <div>
       <MessageList messages={this.state.messages} />
+      <SendMessageForm onSubmit={this.sendMessage}/>
+      </div>
     )
   }
  }
