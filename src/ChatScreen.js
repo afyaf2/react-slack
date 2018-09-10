@@ -1,7 +1,8 @@
- import React from 'react'
- import Chatkit from '@pusher/chatkit'
- import MessageList from './components/MessageList'
- import SendMessageForm from './components/SendMessageForm'
+import React from 'react'
+import Chatkit from '@pusher/chatkit'
+import MessageList from './components/MessageList'
+import SendMessageForm from './components/SendMessageForm'
+import TypingIndicator from './components/TypingIndicator'
 
  class ChatScreen extends React.Component {
   constructor(props){
@@ -9,12 +10,14 @@
     this.state = {
       messages: [],
       currentRoom: {},
-      currentUser: {}
+      currentUser: {},
+      usersTypingCurrently: []
     }
     this.sendMessage = this.sendMessage.bind(this)
+    this.sendTypingEvent = this.sendTypingEvent.bind(this)
   }
 
-  // connect componenet to chatkit API with npm on load
+  // connect component to chatkit API with npm on load
   componentDidMount() {
     const chatManager = new Chatkit.ChatManager({
       instanceLocator: 'v1:us1:1c13b3f2-e119-4f5b-87be-54c0dd3d6e74',
@@ -36,7 +39,19 @@
               this.setState({
                 messages: [...this.state.messages, message]
               })
-            }
+            },
+            onUserStartedTyping: user => {
+              this.setState({
+                usersTypingCurrently: [...this.state.usersTypingCurrently, user.name]
+              })
+            },
+            onUserStoppedTyping: user => {
+              this.setState({
+                usersTypingCurrently: this.state.usersTypingCurrently.filter(
+                  username => username !== user.name
+                )
+              })
+            },
           }
         })
       }).then(currentRoom => {
@@ -54,11 +69,18 @@
     })
   }
 
+  sendTypingEvent() {
+    this.state.currentUser
+      .isTypingIn({roomId: this.state.currentRoom.id})
+      .catch(error => console.log('error', error))
+  }
+
   render() {
     return (
       <div>
       <MessageList messages={this.state.messages} />
-      <SendMessageForm onSubmit={this.sendMessage}/>
+      <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
+      <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
       </div>
     )
   }

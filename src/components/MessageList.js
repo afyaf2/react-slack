@@ -9,7 +9,7 @@ class MessageList extends React.Component {
           {this.props.messages.map((message, index) => {
             return (
               <div className='message-list'>
-                <Message key='m-{index}' username={message.senderId} text={message.text} />
+                <Message key={`m` + index} username={message.senderId} text={message.text} />
               </div>
             )
           })}
