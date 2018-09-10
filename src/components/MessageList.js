@@ -1,11 +1,18 @@
 import React from 'react'
+import Message from './Message'
 
 class MessageList extends React.Component {
 
   render() {
     return (
         <ul>
-          <h1> messages </h1>
+          {this.props.messages.map((message, index) => {
+            return (
+              <div className='message-list'>
+                <Message key='m-{index}' username={message.senderId} text={message.text} />
+              </div>
+            )
+          })}
         </ul>
     )
   }
