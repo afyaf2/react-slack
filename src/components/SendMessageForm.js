@@ -26,11 +26,15 @@ class SendMessageForm extends React.Component {
     this.setState({text:''})
   }
     render() {
+    const placeholderText = this.props.disabled ? "Join a room to send a message!" : "Type your message here";
+
       return (
         <form className="send-message-form" onSubmit={this.handleSubmit}>
           <input
+            /* prevent error by disabling input if user hasnt joined a room */
+            disabled={this.props.disabled}
             onChange={this.handleFormChange}
-            placeholder="Type your message here"
+            placeholder={placeholderText}
             type="text"
             value={this.state.text} />
         </form>

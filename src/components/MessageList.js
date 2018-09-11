@@ -21,6 +21,19 @@ class MessageList extends React.Component {
   }
 
   render() {
+
+    // render prompt for user to join room if they havent
+
+    if (!this.props.roomId) {
+      return (
+         <div className="message-list">
+            <div className="join-room">
+                &larr; Join a room!
+            </div>
+        </div>
+      )
+    }
+
     return (
         <ul>
           {this.props.messages.map((message, index) => {
