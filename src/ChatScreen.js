@@ -18,6 +18,7 @@ import RoomList from './components/RoomList'
     }
     this.sendMessage = this.sendMessage.bind(this)
     this.sendTypingEvent = this.sendTypingEvent.bind(this)
+    this.subscribetoroom = this.subscribetoroom.bind(this)
   }
 
   // connect component to chatkit API with npm on load
@@ -33,10 +34,9 @@ import RoomList from './components/RoomList'
     chatManager
       .connect()
       .then(currentUser => {
-        this.setState({currentUser})
-
+        this.currentUser = currentUser
         // display list of joinable rooms
-        currentUser.getJoinableRooms()
+        this.currentUser.getJoinableRooms()
         .then(joinableRooms => {
           this.setState({
             joinableRooms,
@@ -44,36 +44,40 @@ import RoomList from './components/RoomList'
           })
         })
         .catch(error => console.log('error on joined/able rooms', error))
-
-        // all users will join 'Welcome' room on join
-        return currentUser.subscribeToRoom({
-          roomId: 15866294,
-          messageLimit: 100,
-          hooks: {
-            onNewMessage: message => {
-              this.setState({
-                messages: [...this.state.messages, message]
-              })
-            },
-          // add hook to show other users typing
-            onUserStartedTyping: user => {
-              this.setState({
-                usersTypingCurrently: [...this.state.usersTypingCurrently, user.name]
-              })
-            },
-            onUserStoppedTyping: user => {
-              this.setState({
-                usersTypingCurrently: this.state.usersTypingCurrently.filter(
-                  username => username !== user.name
-                )
-              })
-            },
-          }
-        })
-      }).then(currentRoom => {
-        this.setState({currentRoom})
+        this.subscribetoroom()
       })
-      .catch(error => console.log('error', error))
+      .catch(error => console.log('error on connecting', error));
+    }
+  // create subscribetoroom() method so multiple rooms are joinable
+
+  subscribetoroom() {
+    this.currentUser.subscribeToRoom({
+      roomId: 15866294,
+      messageLimit: 100,
+      hooks: {
+        onNewMessage: message => {
+          this.setState({
+            messages: [...this.state.messages, message]
+          })
+        },
+      // add hook to show other users typing
+        onUserStartedTyping: user => {
+          this.setState({
+            usersTypingCurrently: [...this.state.usersTypingCurrently, user.name]
+          })
+        },
+        onUserStoppedTyping: user => {
+          this.setState({
+            usersTypingCurrently: this.state.usersTypingCurrently.filter(
+              username => username !== user.name
+            )
+          })
+        },
+      }
+    })
+    .then(currentRoom => {
+    this.setState({currentRoom})
+    })
   }
 
   // send message to chatkitAPI on form submission
