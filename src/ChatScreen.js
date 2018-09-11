@@ -44,6 +44,7 @@ import RoomList from './components/RoomList'
   // create subscribetoroom() method so multiple rooms are joinable
 
   subscribeToRoom(roomId) {
+    this.setState({ messages: [] })
     this.currentUser.subscribeToRoom({
       roomId: roomId,
       messageLimit: 100,
@@ -70,6 +71,7 @@ import RoomList from './components/RoomList'
     })
     .then(currentRoom => {
     this.setState({currentRoom})
+    this.getRooms()
     })
   }
 
@@ -87,14 +89,14 @@ import RoomList from './components/RoomList'
 
   // send message to chatkitAPI on form submission
   sendMessage(text) {
-    this.state.currentUser.sendMessage({
+    this.currentUser.sendMessage({
       text,
       roomId: this.state.currentRoom.id,
     })
   }
 
   sendTypingEvent() {
-    this.state.currentUser
+    this.currentUser
       .isTypingIn({roomId: this.state.currentRoom.id})
       .catch(error => console.log('error', error))
   }
