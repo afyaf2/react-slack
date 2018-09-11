@@ -9,7 +9,11 @@ class RoomList extends React.Component {
         {this.props.rooms.map(room => {
           return (
             <li key={room.id} className="room">
-              <a href='#'>{room.name}</a>
+            {/* USED ANON FUNCTION TO AVOID FUNCTION CALL ON RENDER */}
+              <a
+                onClick={() => this.props.subscribeToRoom(room.id)}
+                href='#'>{room.name}
+              </a>
             </li>
           )
         })}

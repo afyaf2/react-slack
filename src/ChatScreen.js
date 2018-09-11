@@ -18,7 +18,8 @@ import RoomList from './components/RoomList'
     }
     this.sendMessage = this.sendMessage.bind(this)
     this.sendTypingEvent = this.sendTypingEvent.bind(this)
-    this.subscribetoroom = this.subscribetoroom.bind(this)
+    this.getRooms = this.getRooms.bind(this)
+    this.subscribeToRoom = this.subscribeToRoom.bind(this)
   }
 
   // connect component to chatkit API with npm on load
@@ -36,23 +37,15 @@ import RoomList from './components/RoomList'
       .then(currentUser => {
         this.currentUser = currentUser
         // display list of joinable rooms
-        this.currentUser.getJoinableRooms()
-        .then(joinableRooms => {
-          this.setState({
-            joinableRooms,
-            joinedRooms: currentUser.rooms
-          })
-        })
-        .catch(error => console.log('error on joined/able rooms', error))
-        this.subscribetoroom()
+        this.getRooms()
       })
       .catch(error => console.log('error on connecting', error));
     }
   // create subscribetoroom() method so multiple rooms are joinable
 
-  subscribetoroom() {
+  subscribeToRoom(roomId) {
     this.currentUser.subscribeToRoom({
-      roomId: 15866294,
+      roomId: roomId,
       messageLimit: 100,
       hooks: {
         onNewMessage: message => {
@@ -80,8 +73,19 @@ import RoomList from './components/RoomList'
     })
   }
 
-  // send message to chatkitAPI on form submission
+  // get list of joinable rooms
+  getRooms() {
+    this.currentUser.getJoinableRooms()
+      .then(joinableRooms => {
+        this.setState({
+          joinableRooms,
+          joinedRooms: this.currentUser.rooms
+        })
+    })
+    .catch(error => console.log('error on joined/able rooms', error))
+  }
 
+  // send message to chatkitAPI on form submission
   sendMessage(text) {
     this.state.currentUser.sendMessage({
       text,
@@ -98,7 +102,10 @@ import RoomList from './components/RoomList'
   render() {
     return (
       <div>
-      <RoomList rooms={[...this.state.joinableRooms, this.state.joinedRooms]} />
+      <RoomList
+        subscribeToRoom={this.subscribeToRoom}
+        rooms={[...this.state.joinableRooms, this.state.joinedRooms]}
+      />
       <MessageList messages={this.state.messages} />
       <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
       <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
