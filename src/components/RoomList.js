@@ -2,11 +2,12 @@ import React from 'react'
 
 class RoomList extends React.Component {
   render() {
+    const orderedRooms = this.props.rooms.sort((a,b) => a.id - b.id)
     return (
       <div className="room-list">
         <div className="room-name">
         <h3>Rooms:</h3>
-        {this.props.rooms.map(room => {
+        {orderedRooms.map(room => {
           return (
             <li key={room.id} className="room">
             {/* USED ANON FUNCTION TO AVOID FUNCTION CALL ON RENDER */}

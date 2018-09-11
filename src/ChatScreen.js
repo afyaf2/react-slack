@@ -25,10 +25,10 @@ import RoomList from './components/RoomList'
   // connect component to chatkit API with npm on load
   componentDidMount() {
     const chatManager = new Chatkit.ChatManager({
-      instanceLocator: 'v1:us1:1c13b3f2-e119-4f5b-87be-54c0dd3d6e74',
+      instanceLocator: 'v1:us1:d0508140-8047-4c95-a45a-1620477f8336',
       userId: this.props.currentUsername,
       tokenProvider: new Chatkit.TokenProvider({
-        url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/1c13b3f2-e119-4f5b-87be-54c0dd3d6e74/token'
+        url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/d0508140-8047-4c95-a45a-1620477f8336/token'
       })
     })
 
@@ -70,8 +70,8 @@ import RoomList from './components/RoomList'
       }
     })
     .then(currentRoom => {
-    this.setState({currentRoom})
-    this.getRooms()
+      this.setState({currentRoom})
+      this.getRooms()
     })
   }
 
@@ -106,7 +106,7 @@ import RoomList from './components/RoomList'
       <div>
       <RoomList
         subscribeToRoom={this.subscribeToRoom}
-        rooms={[...this.state.joinableRooms, this.state.joinedRooms]}
+        rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]}
       />
       <MessageList messages={this.state.messages} />
       <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
