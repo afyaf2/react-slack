@@ -124,9 +124,9 @@ import NewRoomForm from './components/NewRoomForm'
         subscribeToRoom={this.subscribeToRoom}
         rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]}
       />
-      <MessageList messages={this.state.messages} />
+      <MessageList roomId={this.state.currentRoom.id} messages={this.state.messages} />
       <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
-      <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
+      <SendMessageForm disabled={!this.state.currentRoom.id} onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
       <NewRoomForm createRoom={this.createRoom} />
       </div>
     )
