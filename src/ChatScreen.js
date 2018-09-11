@@ -18,75 +18,85 @@ import RoomList from './components/RoomList'
     }
     this.sendMessage = this.sendMessage.bind(this)
     this.sendTypingEvent = this.sendTypingEvent.bind(this)
+    this.getRooms = this.getRooms.bind(this)
+    this.subscribeToRoom = this.subscribeToRoom.bind(this)
   }
 
   // connect component to chatkit API with npm on load
   componentDidMount() {
     const chatManager = new Chatkit.ChatManager({
-      instanceLocator: 'v1:us1:1c13b3f2-e119-4f5b-87be-54c0dd3d6e74',
+      instanceLocator: 'v1:us1:d0508140-8047-4c95-a45a-1620477f8336',
       userId: this.props.currentUsername,
       tokenProvider: new Chatkit.TokenProvider({
-        url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/1c13b3f2-e119-4f5b-87be-54c0dd3d6e74/token'
+        url: 'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/d0508140-8047-4c95-a45a-1620477f8336/token'
       })
     })
 
     chatManager
       .connect()
       .then(currentUser => {
-        this.setState({currentUser})
-
+        this.currentUser = currentUser
         // display list of joinable rooms
-        currentUser.getJoinableRooms()
-        .then(joinableRooms => {
-          this.setState({
-            joinableRooms,
-            joinedRooms: currentUser.rooms
-          })
-        })
-        .catch(error => console.log('error on joined/able rooms', error))
-
-        // all users will join 'Welcome' room on join
-        return currentUser.subscribeToRoom({
-          roomId: 15866294,
-          messageLimit: 100,
-          hooks: {
-            onNewMessage: message => {
-              this.setState({
-                messages: [...this.state.messages, message]
-              })
-            },
-          // add hook to show other users typing
-            onUserStartedTyping: user => {
-              this.setState({
-                usersTypingCurrently: [...this.state.usersTypingCurrently, user.name]
-              })
-            },
-            onUserStoppedTyping: user => {
-              this.setState({
-                usersTypingCurrently: this.state.usersTypingCurrently.filter(
-                  username => username !== user.name
-                )
-              })
-            },
-          }
-        })
-      }).then(currentRoom => {
-        this.setState({currentRoom})
+        this.getRooms()
       })
-      .catch(error => console.log('error', error))
+      .catch(error => console.log('error on connecting', error));
+    }
+  // create subscribetoroom() method so multiple rooms are joinable
+
+  subscribeToRoom(roomId) {
+    this.setState({ messages: [] })
+    this.currentUser.subscribeToRoom({
+      roomId: roomId,
+      messageLimit: 100,
+      hooks: {
+        onNewMessage: message => {
+          this.setState({
+            messages: [...this.state.messages, message]
+          })
+        },
+      // add hook to show other users typing
+        onUserStartedTyping: user => {
+          this.setState({
+            usersTypingCurrently: [...this.state.usersTypingCurrently, user.name]
+          })
+        },
+        onUserStoppedTyping: user => {
+          this.setState({
+            usersTypingCurrently: this.state.usersTypingCurrently.filter(
+              username => username !== user.name
+            )
+          })
+        },
+      }
+    })
+    .then(currentRoom => {
+      this.setState({currentRoom})
+      this.getRooms()
+    })
+  }
+
+  // get list of joinable rooms
+  getRooms() {
+    this.currentUser.getJoinableRooms()
+      .then(joinableRooms => {
+        this.setState({
+          joinableRooms,
+          joinedRooms: this.currentUser.rooms
+        })
+    })
+    .catch(error => console.log('error on joined/able rooms', error))
   }
 
   // send message to chatkitAPI on form submission
-
   sendMessage(text) {
-    this.state.currentUser.sendMessage({
+    this.currentUser.sendMessage({
       text,
       roomId: this.state.currentRoom.id,
     })
   }
 
   sendTypingEvent() {
-    this.state.currentUser
+    this.currentUser
       .isTypingIn({roomId: this.state.currentRoom.id})
       .catch(error => console.log('error', error))
   }
@@ -94,7 +104,11 @@ import RoomList from './components/RoomList'
   render() {
     return (
       <div>
-      <RoomList rooms={[...this.state.joinableRooms, this.state.joinedRooms]} />
+      <RoomList
+        roomId={this.state.currentRoom}
+        subscribeToRoom={this.subscribeToRoom}
+        rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]}
+      />
       <MessageList messages={this.state.messages} />
       <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
       <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>

@@ -3,11 +3,12 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const Chatkit = require('@pusher/chatkit-server')
 
+
 const app = express()
 
 const chatkit = new Chatkit.default({
-  instanceLocator: 'v1:us1:1c13b3f2-e119-4f5b-87be-54c0dd3d6e74',
-  key: 'adf7a742-13b7-4764-99aa-c086ebb721d0:HviEMa/MeqV5aDeu4pYXQ+PBse8+HgrsnAd6Hiv6NKA='
+  instanceLocator: 'v1:us1:d0508140-8047-4c95-a45a-1620477f8336',
+  key: '1715c377-2cd5-49f7-93da-629090d59e77:CL90vCkplNLfvhasGNak0/mdukHrmBoRgDK5UO2CVyE='
 })
 
 
@@ -26,7 +27,7 @@ app.post('/users', (req, res) => {
     })
     .then(() => res.sendStatus(201))
     .catch(error => {
-      if (error.error === 'services/chatkit/user_already_exists') {
+      if (error === 'services/chatkit/user_already_exists') {
         res.sendStatus(200)
       } else {
         res.status(error.status).json(error)
