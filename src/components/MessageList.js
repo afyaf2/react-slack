@@ -11,7 +11,6 @@ class MessageList extends React.Component {
     this.scrollToBottom = node.scrollTop + node.clientHeight + 100 >= node.scrollHeight
   }
 
-
   componentDidUpdate() {
     // scroll to bottom ^^ only if we arent reading top
 
