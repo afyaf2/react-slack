@@ -3,6 +3,23 @@ import Message from './Message'
 
 class MessageList extends React.Component {
 
+  componentWillUpdate() {
+    // check if client is reading earlier messages
+
+    const node = ReactDOM.findDOMNode(this)
+    this.scrollToBottom = node.scrollTop + node.clientHeight + 100 >= node.scrollHeight
+  }
+
+
+  componentDidUpdate() {
+    // scroll to bottom ^^ only if we arent reading top
+
+    if (this.scrollToBottom) {
+      const node = ReactDOM.findDOMNode(this)
+      node.scrollTop = node.scrollHeight
+    }
+  }
+
   render() {
     return (
         <ul>
