@@ -26,7 +26,7 @@ app.post('/users', (req, res) => {
     })
     .then(() => res.sendStatus(201))
     .catch(error => {
-      if (err.error === 'services/chatkit/user_already_exists') {
+      if (error.error === 'services/chatkit/user_already_exists') {
         res.sendStatus(200)
       } else {
         res.status(error.status).json(error)
