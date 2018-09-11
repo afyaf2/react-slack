@@ -4,6 +4,7 @@ import MessageList from './components/MessageList'
 import SendMessageForm from './components/SendMessageForm'
 import TypingIndicator from './components/TypingIndicator'
 import RoomList from './components/RoomList'
+import NewRoomForm from './components/NewRoomForm'
 
  class ChatScreen extends React.Component {
   constructor(props){
@@ -20,9 +21,10 @@ import RoomList from './components/RoomList'
     this.sendTypingEvent = this.sendTypingEvent.bind(this)
     this.getRooms = this.getRooms.bind(this)
     this.subscribeToRoom = this.subscribeToRoom.bind(this)
+    this.createRoom =this.createRoom.bind(this)
   }
 
-  // connect component to chatkit API with npm on load
+  // connect component to chatkit API on mount
   componentDidMount() {
     const chatManager = new Chatkit.ChatManager({
       instanceLocator: 'v1:us1:d0508140-8047-4c95-a45a-1620477f8336',
@@ -41,8 +43,8 @@ import RoomList from './components/RoomList'
       })
       .catch(error => console.log('error on connecting', error));
     }
-  // create subscribetoroom() method so multiple rooms are joinable
 
+  // create subscribetoroom() method so multiple rooms are joinable
   subscribeToRoom(roomId) {
     this.setState({ messages: [] })
     this.currentUser.subscribeToRoom({
@@ -54,6 +56,7 @@ import RoomList from './components/RoomList'
             messages: [...this.state.messages, message]
           })
         },
+
       // add hook to show other users typing
         onUserStartedTyping: user => {
           this.setState({
@@ -87,6 +90,17 @@ import RoomList from './components/RoomList'
     .catch(error => console.log('error on joined/able rooms', error))
   }
 
+  // create a new room using NewRoomForm
+  createRoom(name) {
+    this.currentUser.createRoom({
+      name,
+    }).then(room => {
+      this.subscribeToRoom(room.id)
+    }).catch(error => {
+      console.log('error on room creation ', error)
+    })
+  }
+
   // send message to chatkitAPI on form submission
   sendMessage(text) {
     this.currentUser.sendMessage({
@@ -95,6 +109,7 @@ import RoomList from './components/RoomList'
     })
   }
 
+  // log a typing event for typing notification
   sendTypingEvent() {
     this.currentUser
       .isTypingIn({roomId: this.state.currentRoom.id})
@@ -112,6 +127,7 @@ import RoomList from './components/RoomList'
       <MessageList messages={this.state.messages} />
       <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
       <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
+      <NewRoomForm createRoom={this.createRoom} />
       </div>
     )
   }
