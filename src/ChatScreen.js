@@ -3,6 +3,7 @@ import Chatkit from '@pusher/chatkit'
 import MessageList from './components/MessageList'
 import SendMessageForm from './components/SendMessageForm'
 import TypingIndicator from './components/TypingIndicator'
+import RoomList from './components/RoomList'
 
  class ChatScreen extends React.Component {
   constructor(props){
@@ -11,6 +12,8 @@ import TypingIndicator from './components/TypingIndicator'
       messages: [],
       currentRoom: {},
       currentUser: {},
+      joinableRooms: [],
+      joinedRooms: [],
       usersTypingCurrently: []
     }
     this.sendMessage = this.sendMessage.bind(this)
@@ -31,6 +34,18 @@ import TypingIndicator from './components/TypingIndicator'
       .connect()
       .then(currentUser => {
         this.setState({currentUser})
+
+        // display list of joinable rooms
+        currentUser.getJoinableRooms()
+        .then(joinableRooms => {
+          this.setState({
+            joinableRooms,
+            joinedRooms: currentUser.rooms
+          })
+        })
+        .catch(error => console.log('error on joined/able rooms', error))
+
+        // all users will join 'Welcome' room on join
         return currentUser.subscribeToRoom({
           roomId: 15866294,
           messageLimit: 100,
@@ -40,6 +55,7 @@ import TypingIndicator from './components/TypingIndicator'
                 messages: [...this.state.messages, message]
               })
             },
+          // add hook to show other users typing
             onUserStartedTyping: user => {
               this.setState({
                 usersTypingCurrently: [...this.state.usersTypingCurrently, user.name]
@@ -78,6 +94,7 @@ import TypingIndicator from './components/TypingIndicator'
   render() {
     return (
       <div>
+      <RoomList rooms={[...this.state.joinableRooms, this.state.joinedRooms]} />
       <MessageList messages={this.state.messages} />
       <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
       <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
