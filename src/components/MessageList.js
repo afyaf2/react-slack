@@ -35,11 +35,16 @@ class MessageList extends React.Component {
     }
 
     return (
-      <div>
-      <Header as="h3">
-        <Icon name="slack hash" verticalAlign="middle" />
+      <div className="messages-box">
+      <Header as="h3" className="sticky-header">
+        <Icon
+        name="slack hash"
+        verticalAlign="middle"
+        color='orange'
+        />
         <Header.Content>{this.props.roomId.name}</Header.Content>
       </Header>
+      <div className="messages">
         <List relaxed>
           {this.props.messages.map((message, index) => {
             return (
@@ -53,6 +58,7 @@ class MessageList extends React.Component {
             )
           })}
         </List>
+      </div>
       </div>
     )
   }
