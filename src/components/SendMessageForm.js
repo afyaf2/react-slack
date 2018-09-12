@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input } from 'semantic-ui-react'
+import { Form, Input } from 'semantic-ui-react'
 
 class SendMessageForm extends React.Component {
   constructor(props) {
@@ -30,16 +30,16 @@ class SendMessageForm extends React.Component {
     const placeholderText = this.props.disabled ? "Join a room to send a message!" : "Type your message here";
 
       return (
-        <form className="send-message-form" onSubmit={this.handleSubmit}>
-          <Input focus fluid
-            onChange={this.handleFormChange}
+        <Form className="send-message-form" onSubmit={this.handleSubmit}>
+          <Input fluid focus transparent
+            action={{color:'teal', icon:'talk'}}
             placeholder="Type your message here..."
             disabled={this.props.disabled}
             onChange={this.handleFormChange}
             placeholder={placeholderText}
             type="text"
             value={this.state.text} />
-        </form>
+        </Form>
       )
     }
   }

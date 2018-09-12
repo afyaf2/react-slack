@@ -11,6 +11,11 @@
   transform: translate(-50%, -50%);
 }
 
+.chatscreen-margin {
+  margin-top: 100px;
+}
+
+
 .content-active {
   background-image: linear-gradient(120deg, white 0%, #FFBF46 100%) !important;
   background-repeat: no-repeat !important;
@@ -30,7 +35,6 @@
 }
 
 .messages-box {
-  min-width: 100%;
   min-height: 50vh;
   max-height: 50vh;
   overflow-y: auto;

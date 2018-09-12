@@ -120,7 +120,7 @@ import { Container, Grid, Segment } from 'semantic-ui-react'
   render() {
     return (
       <div>
-        <Container>
+        <Container className="chatscreen-margin">
         <Segment padded raised>
           <Grid columns={2} divided>
             {/* roomlist and messages row */}
@@ -140,13 +140,17 @@ import { Container, Grid, Segment } from 'semantic-ui-react'
 
           {/* user inputs row */}
             <Grid.Row>
-              <Grid.Column width={4}>
-              <NewRoomForm createRoom={this.createRoom} />
-              </Grid.Column>
-              <Grid.Column width={12}>
-              <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
-              <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
-              </Grid.Column>
+                <Grid.Column width={4}>
+                <Segment>
+                  <NewRoomForm createRoom={this.createRoom} />
+                </Segment>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  <Segment>
+                    <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
+                    <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
+                  </Segment>
+                </Grid.Column>
             </Grid.Row>
           </Grid>
           </Segment>

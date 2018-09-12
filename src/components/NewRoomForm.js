@@ -31,7 +31,7 @@ class NewRoomForm extends React.Component {
     return (
     <div>
       <Form onSubmit={this.handleSubmit}>
-      <Input fluid
+      <Input fluid transparent
           action={{color:'teal', content:'Add'}}
           value={this.state.roomName}
           onChange={this.handleChange}

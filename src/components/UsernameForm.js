@@ -44,7 +44,7 @@ class UsernameForm extends React.Component {
               color='orange'
               >
               <Icon fitted name='github' />
-            </Label>
+              </Label>
           </Segment>
           </form>
         </Container>
