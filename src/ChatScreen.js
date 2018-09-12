@@ -5,7 +5,7 @@ import SendMessageForm from './components/SendMessageForm'
 import TypingIndicator from './components/TypingIndicator'
 import RoomList from './components/RoomList'
 import NewRoomForm from './components/NewRoomForm'
-import { Container, Grid } from 'semantic-ui-react'
+import { Container, Grid, Segment } from 'semantic-ui-react'
 
  class ChatScreen extends React.Component {
   constructor(props){
@@ -121,8 +121,8 @@ import { Container, Grid } from 'semantic-ui-react'
     return (
       <div>
         <Container>
-          <Grid celled>
-
+        <Segment padded raised>
+          <Grid columns={2} divided>
             {/* roomlist and messages row */}
             <Grid.Row>
               <Grid.Column width={4}>
@@ -131,7 +131,7 @@ import { Container, Grid } from 'semantic-ui-react'
                   subscribeToRoom={this.subscribeToRoom}
                   rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]} />
               </Grid.Column>
-              <Grid.Column width={8}>
+              <Grid.Column width={12}>
                 <MessageList
                 roomId={this.state.currentRoom}
                 messages={this.state.messages} />
@@ -149,6 +149,7 @@ import { Container, Grid } from 'semantic-ui-react'
               </Grid.Column>
             </Grid.Row>
           </Grid>
+          </Segment>
         </Container>
       </div>
     )
