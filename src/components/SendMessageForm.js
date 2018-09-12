@@ -1,4 +1,5 @@
 import React from 'react'
+import { Input } from 'semantic-ui-react'
 
 class SendMessageForm extends React.Component {
   constructor(props) {
@@ -30,8 +31,9 @@ class SendMessageForm extends React.Component {
 
       return (
         <form className="send-message-form" onSubmit={this.handleSubmit}>
-          <input
-            /* prevent error by disabling input if user hasnt joined a room */
+          <Input focus fluid
+            onChange={this.handleFormChange}
+            placeholder="Type your message here..."
             disabled={this.props.disabled}
             onChange={this.handleFormChange}
             placeholder={placeholderText}

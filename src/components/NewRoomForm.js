@@ -1,4 +1,6 @@
 import React from 'react'
+import { Form, Input } from 'semantic-ui-react'
+
 
 class NewRoomForm extends React.Component {
 
@@ -27,16 +29,16 @@ class NewRoomForm extends React.Component {
 
   render () {
     return (
-        <div className="new-room-form">
-            <form onSubmit={this.handleSubmit}>
-                <input
-                    value={this.state.roomName}
-                    onChange={this.handleChange}
-                    type="text"
-                    placeholder="Create a room!"
-                    required />
-                <button id="create-room-btn" type="submit">+</button>
-        </form>
+    <div>
+      <Form onSubmit={this.handleSubmit}>
+      <Input fluid
+          action={{color:'teal', content:'Add'}}
+          value={this.state.roomName}
+          onChange={this.handleChange}
+          type="text"
+          placeholder="Add a new room"
+          required />
+      </Form>
     </div>
     )
   }
