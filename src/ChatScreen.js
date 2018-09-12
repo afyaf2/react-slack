@@ -5,6 +5,7 @@ import SendMessageForm from './components/SendMessageForm'
 import TypingIndicator from './components/TypingIndicator'
 import RoomList from './components/RoomList'
 import NewRoomForm from './components/NewRoomForm'
+import { Container, Grid } from 'semantic-ui-react'
 
  class ChatScreen extends React.Component {
   constructor(props){
@@ -119,15 +120,36 @@ import NewRoomForm from './components/NewRoomForm'
   render() {
     return (
       <div>
-      <RoomList
-        roomId={this.state.currentRoom}
-        subscribeToRoom={this.subscribeToRoom}
-        rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]}
-      />
-      <MessageList messages={this.state.messages} />
-      <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
-      <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
-      <NewRoomForm createRoom={this.createRoom} />
+        <Container>
+          <Grid celled>
+
+            {/* roomlist and messages row */}
+            <Grid.Row>
+              <Grid.Column width={4}>
+                <RoomList
+                  roomId={this.state.currentRoom}
+                  subscribeToRoom={this.subscribeToRoom}
+                  rooms={[...this.state.joinableRooms, ...this.state.joinedRooms]} />
+              </Grid.Column>
+              <Grid.Column width={8}>
+                <MessageList
+                roomId={this.state.currentRoom}
+                messages={this.state.messages} />
+              </Grid.Column>
+            </Grid.Row>
+
+          {/* user inputs row */}
+            <Grid.Row>
+              <Grid.Column width={4}>
+              <NewRoomForm createRoom={this.createRoom} />
+              </Grid.Column>
+              <Grid.Column width={12}>
+              <TypingIndicator usersTypingCurrently={this.state.usersTypingCurrently} />
+              <SendMessageForm onSubmit={this.sendMessage} onChange={this.sendTypingEvent}/>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+        </Container>
       </div>
     )
   }

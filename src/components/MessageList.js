@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Message from './Message'
+import UserMessage from './UserMessage'
+import { Header, Icon, List } from 'semantic-ui-react'
 
 class MessageList extends React.Component {
 
@@ -13,7 +14,6 @@ class MessageList extends React.Component {
 
   componentDidUpdate() {
     // scroll to bottom ^^ only if we arent reading top
-
     if (this.scrollToBottom) {
       const node = ReactDOM.findDOMNode(this)
       node.scrollTop = node.scrollHeight
@@ -22,15 +22,25 @@ class MessageList extends React.Component {
 
   render() {
     return (
-        <ul>
+      <div>
+      <Header as="h3">
+        <Icon name="slack hash" verticalAlign="middle" />
+        <Header.Content>{this.props.roomId.name}</Header.Content>
+      </Header>
+        <List relaxed>
           {this.props.messages.map((message, index) => {
             return (
-              <div className='message-list'>
-                <Message key={message.id} username={message.senderId} text={message.text} />
-              </div>
+              <List.Item>
+                <UserMessage
+                key={message.id}
+                username={message.senderId}
+                text={message.text}
+                />
+              </List.Item>
             )
           })}
-        </ul>
+        </List>
+      </div>
     )
   }
 }
