@@ -19,7 +19,8 @@
     "concurrently": "^3.5.1"
   },
   "scripts": {
-    "start": "concurrently \"node ./server.js\" \"react-scripts start\"",
+    "start": "concurrently \"node ./server.js\" \"react-scripts start\" ",
+    "heroku-postbuild": "cd client && npm install && npm run build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

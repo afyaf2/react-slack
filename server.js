@@ -16,7 +16,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors())
 
-app.listen(process.env.PORT || 3001, err => {
+app.listen(process.env.PORT || 5000, err => {
   if (err) {
     console.error(err)
   } else {
