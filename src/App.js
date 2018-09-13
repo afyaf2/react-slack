@@ -14,7 +14,7 @@ class App extends Component {
   }
 
   onUserNameSubmission(username) {
-    fetch('https://us1.pusherplatform.io/services/chatkit/v1/v1:us1:d0508140-8047-4c95-a45a-1620477f8336/', {
+    fetch('https://us1.pusherplatform.io/services/chatkit/v1/d0508140-8047-4c95-a45a-1620477f8336/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

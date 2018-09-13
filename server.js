@@ -24,7 +24,7 @@ app.listen(process.env.PORT || 5000, err => {
   }
 })
 
-app.post('https://us1.pusherplatform.io/services/chatkit/v1/v1:us1:d0508140-8047-4c95-a45a-1620477f8336/users', (req, res) => {
+app.post('https://us1.pusherplatform.io/services/chatkit/v1/d0508140-8047-4c95-a45a-1620477f8336/users', (req, res) => {
   const { username } = req.body
   chatkit
     .createUser({
@@ -41,7 +41,7 @@ app.post('https://us1.pusherplatform.io/services/chatkit/v1/v1:us1:d0508140-8047
     })
 })
 
-app.post('https://us1.pusherplatform.io/services/chatkit/v1/v1:us1:d0508140-8047-4c95-a45a-1620477f8336/authenticate', (req, res) => {
+app.post('https://us1.pusherplatform.io/services/chatkit/v1/d0508140-8047-4c95-a45a-1620477f8336/authenticate', (req, res) => {
   const authData = chatkit.authenticate({ userId: req.query.user_id })
   res.status(authData.status).send(authData.body)
 })
