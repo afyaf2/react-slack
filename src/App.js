@@ -14,7 +14,7 @@ class App extends Component {
   }
 
   onUserNameSubmission(username) {
-    fetch('http://localhost:3001/users', {
+    fetch('https://react-slack-chat-app.herokuapp.com/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
