@@ -16,6 +16,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(cors())
 
+app.listen(process.env.PORT || 3001, err => {
+  if (err) {
+    console.error(err)
+  } else {
+    console.log(`Running on port ${PORT}`)
+  }
+})
 
 app.post('/users', (req, res) => {
   const { username } = req.body
@@ -39,13 +46,4 @@ app.post('/authenticate', (req, res) => {
   res.status(authData.status).send(authData.body)
 })
 
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, err => {
-  if (err) {
-    console.error(err)
-  } else {
-    console.log(`Running on port ${PORT}`)
-  }
-})
 
